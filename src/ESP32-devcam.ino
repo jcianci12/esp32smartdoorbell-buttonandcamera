@@ -15,14 +15,13 @@
 
 /////////////////////////////////////////////////////////////////
 
-#define BUTTON_A_PIN  2
+#define BUTTON_A_PIN 2
 
 /////////////////////////////////////////////////////////////////
 
-
 // This board has slightly different GPIO bindings (and lots more RAM)
 // uncomment to use
- //#define USEBOARD_TTGO_T
+//#define USEBOARD_TTGO_T
 
 // #define USEBOARD_AITHINKER
 
@@ -33,7 +32,6 @@
 // #define SOFTAP_MODE // If you want to run our own softap turn this on
 #define ENABLE_WEBSERVER
 #define ENABLE_RTSPSERVER
-
 
 #ifndef USEBOARD_AITHINKER
 // If your board has a GPIO which is attached to a button, uncomment the following line
@@ -68,7 +66,6 @@ WebServer server(80);
 WiFiServer rtspServer(8554);
 #endif
 
-
 #ifdef SOFTAP_MODE
 IPAddress apIP = IPAddress(192, 168, 1, 1);
 #else
@@ -78,9 +75,15 @@ Button2 buttonA = Button2(DOORBELL_BUTTON);
 // variables will change:
 /////////////////////////////////////////////////////////////////////////
 
+
+
+
+int32_t i =0;
+
 #ifdef ENABLE_WEBSERVER
 void handle_jpg_stream(void)
 {
+
     WiFiClient client = server.client();
     String response = "HTTP/1.1 200 OK\r\n";
     response += "Content-Type: multipart/x-mixed-replace; boundary=frame\r\n\r\n";
@@ -88,9 +91,14 @@ void handle_jpg_stream(void)
 
     while (1)
     {
+
+
         cam.run();
-        if (!client.connected())
-            break;
+        Serial.println(buttonA.wasPressedFor());
+
+           Serial.println("in the cam loop" + i) ;
+i=i+1;
+
         response = "--frame\r\n";
         response += "Content-Type: image/jpeg\r\n\r\n";
         server.sendContent(response);
@@ -101,10 +109,9 @@ void handle_jpg_stream(void)
             break;
     }
 }
-
 void handle_jpg(void)
 {
-      buttonA.loop();
+    //   buttonA.loop();
 
     WiFiClient client = server.client();
 
@@ -113,11 +120,14 @@ void handle_jpg(void)
     {
         return;
     }
+    
+        //Serial.println(buttonA.wasPressedFor()) 
     String response = "HTTP/1.1 200 OK\r\n";
     response += "Content-disposition: inline; filename=capture.jpg\r\n";
     response += "Content-type: image/jpeg\r\n\r\n";
     server.sendContent(response);
     client.write((char *)cam.getfb(), cam.getSize());
+       
 }
 
 void handleNotFound()
@@ -136,25 +146,27 @@ void handleNotFound()
 
 void lcdMessage(String msg)
 {
-  #ifdef ENABLE_OLED
-    if(hasDisplay) {
+#ifdef ENABLE_OLED
+    if (hasDisplay)
+    {
         display.clear();
         display.drawString(128 / 2, 32 / 2, msg);
         display.display();
     }
-  #endif
+#endif
 }
 
 void setup()
 {
-  #ifdef ENABLE_OLED
+#ifdef ENABLE_OLED
     hasDisplay = display.init();
-    if(hasDisplay) {
+    if (hasDisplay)
+    {
         display.flipScreenVertically();
         display.setFont(ArialMT_Plain_16);
         display.setTextAlignment(TEXT_ALIGN_CENTER);
     }
-  #endif
+#endif
     lcdMessage("booting");
 
     Serial.begin(115200);
@@ -162,19 +174,21 @@ void setup()
     {
         ;
     }
-////////////////////////////////////////////////////////////////////////////////
-  // initialize the pushbutton pin as an input:
-  pinMode(DOORBELL_BUTTON, INPUT);
-  // buttonA.setChangedHandler(changed);
-  // buttonA.setPressedHandler(pressed);
-  buttonA.setReleasedHandler(released);
 
-  // buttonA.setTapHandler(tap);
-  buttonA.setClickHandler(click);
-  buttonA.setLongClickHandler(longClick);
-  buttonA.setDoubleClickHandler(doubleClick);
-  buttonA.setTripleClickHandler(tripleClick);
-////////////////////////////////////////////////////////////////////////////////////
+
+
+    ////////////////////////////////////////////////////////////////////////////////
+    // initialize the pushbutton pin as an input:
+      buttonA.setChangedHandler(changed);
+      buttonA.setPressedHandler(pressed);
+     buttonA.setReleasedHandler(released);
+
+     buttonA.setTapHandler(tap);
+    buttonA.setClickHandler(click);
+    buttonA.setLongClickHandler(longClick);
+     buttonA.setDoubleClickHandler(doubleClick);
+     buttonA.setTripleClickHandler(tripleClick);
+    ////////////////////////////////////////////////////////////////////////////////////
     int camInit =
 #ifdef USEBOARD_TTGO_T
         cam.init(esp32cam_ttgo_t_config);
@@ -188,7 +202,6 @@ void setup()
     Serial.printf("Camera init returned %d\n", camInit);
 
     IPAddress ip;
-
 
 #ifdef SOFTAP_MODE
     const char *hostname = "devcam";
@@ -214,16 +227,15 @@ void setup()
 
     WiFi.mode(WIFI_STA);
 
-
     AutoWifi a;
 
-    #ifdef FACTORYRESET_BUTTON
+#ifdef FACTORYRESET_BUTTON
     pinMode(FACTORYRESET_BUTTON, INPUT);
-    if(!digitalRead(FACTORYRESET_BUTTON))     // 1 means not pressed
+    if (!digitalRead(FACTORYRESET_BUTTON)) // 1 means not pressed
         a.resetProvisioning();
-    #endif
+#endif
 
-    if(!a.isProvisioned())
+    if (!a.isProvisioned())
         lcdMessage("Setup wifi!");
     else
         lcdMessage(String("join ") + a.getSSID());
@@ -260,86 +272,88 @@ WiFiClient client; // FIXME, support multiple clients
 void loop()
 {
 
+    buttonA.loop();
+    Serial.println("Looping");
 
-  buttonA.loop();
 
 #ifdef ENABLE_WEBSERVER
     server.handleClient();
 #endif
 
-// #ifdef ENABLE_RTSPSERVER
-//     uint32_t msecPerFrame = 100;
-//     static uint32_t lastimage = millis();
+    // #ifdef ENABLE_RTSPSERVER
+    //     uint32_t msecPerFrame = 100;
+    //     static uint32_t lastimage = millis();
 
-//     // If we have an active client connection, just service that until gone
-//     // (FIXME - support multiple simultaneous clients)
-//     if(session) {
-//         session->handleRequests(0); // we don't use a timeout here,
-//         // instead we send only if we have new enough frames
+    //     // If we have an active client connection, just service that until gone
+    //     // (FIXME - support multiple simultaneous clients)
+    //     if(session) {
+    //         session->handleRequests(0); // we don't use a timeout here,
+    //         // instead we send only if we have new enough frames
 
-//         uint32_t now = millis();
-//         if(now > lastimage + msecPerFrame || now < lastimage) { // handle clock rollover
-//             session->broadcastCurrentFrame(now);
-//             lastimage = now;
+    //         uint32_t now = millis();
+    //         if(now > lastimage + msecPerFrame || now < lastimage) { // handle clock rollover
+    //             session->broadcastCurrentFrame(now);
+    //             lastimage = now;
 
-//             // check if we are overrunning our max frame rate
-//             now = millis();
-//             if(now > lastimage + msecPerFrame)
-//                 printf("warning exceeding max frame rate of %d ms\n", now - lastimage);
-//         }
+    //             // check if we are overrunning our max frame rate
+    //             now = millis();
+    //             if(now > lastimage + msecPerFrame)
+    //                 printf("warning exceeding max frame rate of %d ms\n", now - lastimage);
+    //         }
 
-//         if(session->m_stopped) {
-//             delete session;
-//             delete streamer;
-//             session = NULL;
-//             streamer = NULL;
-//         }
-//     }
-//     else {
-//         client = rtspServer.accept();
+    //         if(session->m_stopped) {
+    //             delete session;
+    //             delete streamer;
+    //             session = NULL;
+    //             streamer = NULL;
+    //         }
+    //     }
+    //     else {
+    //         client = rtspServer.accept();
 
-//         if(client) {
-//             //streamer = new SimStreamer(&client, true);             // our streamer for UDP/TCP based RTP transport
-//             streamer = new OV2640Streamer(&client, cam);             // our streamer for UDP/TCP based RTP transport
+    //         if(client) {
+    //             //streamer = new SimStreamer(&client, true);             // our streamer for UDP/TCP based RTP transport
+    //             streamer = new OV2640Streamer(&client, cam);             // our streamer for UDP/TCP based RTP transport
 
-//             session = new CRtspSession(&client, streamer); // our threads RTSP session and state
-//         }
-//     }
-// #endif
+    //             session = new CRtspSession(&client, streamer); // our threads RTSP session and state
+    //         }
+    //     }
+    // #endif
 }
 /////////////////////////////////////////////////////////////////
 
-void pressed(Button2& btn) {
+void pressed(Button2 &btn)
+{
     Serial.println("pressed");
-        
-
 }
-void released(Button2& btn) {
+void released(Button2 &btn)
+{
     Serial.print("released: ");
     Serial.println(btn.wasPressedFor());
 }
-void changed(Button2& btn) {
+void changed(Button2 &btn)
+{
     Serial.println("changed");
-      
-
 }
-void click(Button2& btn) {
+void click(Button2 &btn)
+{
     Serial.println("click\n");
-       
-
+    Serial.println(btn.wasPressedFor());
 }
-void longClick(Button2& btn) {
+void longClick(Button2 &btn)
+{
     Serial.println("long click\n");
 }
-void doubleClick(Button2& btn) {
+void doubleClick(Button2 &btn)
+{
     Serial.println("double click\n");
 }
-void tripleClick(Button2& btn) {
+void tripleClick(Button2 &btn)
+{
     Serial.println("triple click\n");
-
 }
-void tap(Button2& btn) {
+void tap(Button2 &btn)
+{
     Serial.println("tap");
-    
 }
 /////////////////////////////////////////////////////////////////

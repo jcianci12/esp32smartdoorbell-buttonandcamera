@@ -268,9 +268,9 @@ void loop()
 // i=i+1;
   buttonA.loop();
 
-// #ifdef ENABLE_WEBSERVER
-//     server.handleClient();
-// #endif
+#ifdef ENABLE_WEBSERVER
+    server.handleClient();
+#endif
 
 // #ifdef ENABLE_RTSPSERVER
 //     uint32_t msecPerFrame = 100;

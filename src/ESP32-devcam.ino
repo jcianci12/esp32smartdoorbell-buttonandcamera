@@ -75,9 +75,7 @@ IPAddress apIP = IPAddress(192, 168, 1, 1);
 #endif
 /////////////////////////////////////////////////////////////////////////
 Button2 buttonA = Button2(DOORBELL_BUTTON);
-int i;
 // variables will change:
-int buttonState = 0;         // variable for reading the pushbutton status
 /////////////////////////////////////////////////////////////////////////
 
 #ifdef ENABLE_WEBSERVER
@@ -106,6 +104,8 @@ void handle_jpg_stream(void)
 
 void handle_jpg(void)
 {
+      buttonA.loop();
+
     WiFiClient client = server.client();
 
     cam.run();
@@ -259,13 +259,8 @@ WiFiClient client; // FIXME, support multiple clients
 
 void loop()
 {
-// read the state of the pushbutton value:
-  buttonState = digitalRead(DOORBELL_BUTTON);
 
-  // check if the pushbutton is pressed. If it is, the buttonState is HIGH:
- 
-// lcdMessage(String(i));
-// i=i+1;
+
   buttonA.loop();
 
 #ifdef ENABLE_WEBSERVER

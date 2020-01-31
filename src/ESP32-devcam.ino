@@ -264,8 +264,8 @@ void loop()
 
   // check if the pushbutton is pressed. If it is, the buttonState is HIGH:
  
-lcdMessage(String(i));
-i=i+1;
+// lcdMessage(String(i));
+// i=i+1;
   buttonA.loop();
 
 // #ifdef ENABLE_WEBSERVER
@@ -316,7 +316,7 @@ i=i+1;
 
 void pressed(Button2& btn) {
     Serial.println("pressed");
-        i = 0;
+        
 
 }
 void released(Button2& btn) {
@@ -325,12 +325,12 @@ void released(Button2& btn) {
 }
 void changed(Button2& btn) {
     Serial.println("changed");
-        i = 0;
+      
 
 }
 void click(Button2& btn) {
     Serial.println("click\n");
-        i = 0;
+       
 
 }
 void longClick(Button2& btn) {
@@ -345,6 +345,6 @@ void tripleClick(Button2& btn) {
 }
 void tap(Button2& btn) {
     Serial.println("tap");
-    i = 0;
+    
 }
 /////////////////////////////////////////////////////////////////

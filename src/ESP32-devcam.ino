@@ -1,4 +1,3 @@
-#include "OV2640.h"
 #include <WiFi.h>
 #include <WebServer.h>
 #include <WiFiClient.h>
@@ -82,6 +81,149 @@ unsigned long time_now = 0;
 
 int32_t i = 0;
 
+
+////////////////////////////////////////////////////////////////
+//ESPNOW RELEVANT CODE
+#include <esp_now.h>
+// SENDER and RECEIVER are arbitrary with ESP-NOW, this is solely for this example
+#define SENDER
+
+#ifndef SENDER
+#define RECEIVER
+#endif
+static uint8_t broadcast_mac[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+typedef struct __attribute__((packed)) esp_now_msg_t
+{
+  uint32_t address;
+  uint32_t counter;
+  // Can put lots of things here...
+} esp_now_msg_t;
+
+static void handle_error(esp_err_t err)
+{
+  switch (err)
+  {
+    case ESP_ERR_ESPNOW_NOT_INIT:
+      Serial.println("Not init");
+      break;
+
+    case ESP_ERR_ESPNOW_ARG:
+      Serial.println("Argument invalid");
+      break;
+
+    case ESP_ERR_ESPNOW_INTERNAL:
+      Serial.println("Internal error");
+      break;
+
+    case ESP_ERR_ESPNOW_NO_MEM:
+      Serial.println("Out of memory");
+      break;
+
+    case ESP_ERR_ESPNOW_NOT_FOUND:
+      Serial.println("Peer is not found");
+      break;
+
+    case ESP_ERR_ESPNOW_IF:
+      Serial.println("Current WiFi interface doesn't match that of peer");
+      break;
+
+    default:
+      break;
+  }
+}
+
+static void msg_recv_cb(const uint8_t *mac_addr, const uint8_t *data, int len)
+{
+  if (len == sizeof(esp_now_msg_t))
+  {
+    esp_now_msg_t msg;
+    memcpy(&msg, data, len);
+
+    Serial.print("Counter: ");
+    Serial.println(msg.counter);
+    //digitalWrite(LED_PIN, !digitalRead(LED_PIN));
+  }
+}
+
+static void msg_send_cb(const uint8_t* mac, esp_now_send_status_t sendStatus)
+{
+
+  switch (sendStatus)
+  {
+    case ESP_NOW_SEND_SUCCESS:
+      Serial.println("Send success");
+      break;
+
+    case ESP_NOW_SEND_FAIL:
+      Serial.println("Send Failure");
+      break;
+
+    default:
+      break;
+  }
+}
+
+static void send_msg(esp_now_msg_t * msg)
+{
+  // Pack
+  uint16_t packet_size = sizeof(esp_now_msg_t);
+  uint8_t msg_data[packet_size];
+  memcpy(&msg_data[0], msg, sizeof(esp_now_msg_t));
+
+  esp_err_t status = esp_now_send(broadcast_mac, msg_data, packet_size);
+  if (ESP_OK != status)
+  {
+    Serial.println("Error sending message");
+    handle_error(status);
+  }
+}
+
+static void network_setup(void)
+{
+//   //Puts ESP in STATION MODE
+//   WiFi.mode(WIFI_STA);
+//   WiFi.disconnect();
+
+//   if (esp_now_init() != 0)
+//   {
+//     return;
+//   }
+
+//   esp_now_peer_info_t peer_info;
+//   peer_info.channel = WiFi.channel();
+//   memcpy(peer_info.peer_addr, broadcast_mac, 6);
+//   peer_info.ifidx = ESP_IF_WIFI_STA;
+//   peer_info.encrypt = false;
+//   esp_err_t status = esp_now_add_peer(&peer_info);
+//   if (ESP_OK != status)
+//   {
+//     Serial.println("Could not add peer");
+//     handle_error(status);
+//   }
+
+//   // Set up callback
+//   status = esp_now_register_recv_cb(msg_recv_cb);
+//   if (ESP_OK != status)
+//   {
+//     Serial.println("Could not register callback");
+//     handle_error(status);
+//   }
+
+//   status = esp_now_register_send_cb(msg_send_cb);
+//   if (ESP_OK != status)
+//   {
+//     Serial.println("Could not register send callback");
+//     handle_error(status);
+//   }
+}
+
+
+////////////////////////////////////////////////////////////////
+
+
+
+
+
 #ifdef ENABLE_WEBSERVER
 void handle_jpg_stream(void)
 {
@@ -157,15 +299,15 @@ void lcdMessage(String msg)
 }
 
 TaskHandle_t Core0Task1;
-TaskHandle_t Core1Task;
+TaskHandle_t Core1Task1;
 
 void setup()
 {
 
     xTaskCreatePinnedToCore(
         Core0Code, /* Function to implement the task */
-        "Task1",   /* Name of the task */
-        10000,     /* Stack size in words */
+        "Task0",   /* Name of the task */
+        9208,     /* Stack size in words */
         NULL,      /* Task input parameter */
         0,         /* Priority of the task */
         &Core0Task1,    /* Task handle. */
@@ -177,7 +319,7 @@ void setup()
     //     10000,     /* Stack size in words */
     //     NULL,      /* Task input parameter */
     //     0,         /* Priority of the task */
-    //     &Core1Task,    /* Task handle. */
+    //     &Core1Task1,    /* Task handle. */
     //     1);        /* Core where the task should run */
 
 #ifdef ENABLE_OLED
@@ -196,6 +338,12 @@ void setup()
     {
         ;
     }
+
+////////////ESPNOW///////////
+  network_setup();
+////////////////////////////
+
+
 
     ////////////////////////////////////////////////////////////////////////////////
     // initialize the pushbutton pin as an input:
@@ -291,13 +439,33 @@ WiFiClient client; // FIXME, support multiple clients
 
 void loop()
 {
-    #ifdef ENABLE_WEBSERVER
+   
+#ifdef ENABLE_WEBSERVER
         server.handleClient();
+        if (millis() >= time_now + period+1)
+        {
+            time_now += period;
+            Serial.println("core 1 loop");
+        }
 #endif
-
 }
 
-
+// void Core1Code(void *parameter)
+// {
+//     for (;;)
+//     {
+//         #ifdef ENABLE_WEBSERVER
+//         server.handleClient();
+//         if (millis() >= time_now + period+1)
+//         {
+//             time_now += period;
+//             Serial.println("core 1 loop");
+//         }
+// #endif
+//         vTaskDelay(20);
+//         //Serial.println( uxTaskGetStackHighWaterMark(NULL));
+//     }
+// }
 
 void Core0Code(void *parameter)
 {
@@ -310,6 +478,7 @@ void Core0Code(void *parameter)
             Serial.println("core 0 loop");
         }
         vTaskDelay(20);
+        //Serial.println( uxTaskGetStackHighWaterMark(NULL));
     }
 }
 
@@ -318,6 +487,16 @@ void Core0Code(void *parameter)
 void pressed(Button2 &btn)
 {
     Serial.println("pressed");
+    #ifdef SENDER
+  static uint32_t counter = 0;
+  esp_now_msg_t msg;
+  msg.address = 0;
+  msg.counter = ++counter;
+    Serial.println("sending message");
+
+  send_msg(&msg);
+  //digitalWrite(LED_PIN, !digitalRead(LED_PIN));
+  #endif
 }
 void released(Button2 &btn)
 {

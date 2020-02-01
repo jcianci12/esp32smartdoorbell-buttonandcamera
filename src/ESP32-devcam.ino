@@ -77,8 +77,10 @@ Button2 buttonA = Button2(DOORBELL_BUTTON);
 
 
 
+int period = 1000;
+unsigned long time_now = 0;
 
-int32_t i =0;
+int32_t i = 0;
 
 #ifdef ENABLE_WEBSERVER
 void handle_jpg_stream(void)
@@ -92,12 +94,11 @@ void handle_jpg_stream(void)
     while (1)
     {
 
-
         cam.run();
-        Serial.println(buttonA.wasPressedFor());
+        //Serial.println(buttonA.wasPressedFor());
 
-           Serial.println("in the cam loop" + i) ;
-i=i+1;
+        //Serial.println("in the cam loop" + i);
+        i = i + 1;
 
         response = "--frame\r\n";
         response += "Content-Type: image/jpeg\r\n\r\n";
@@ -120,14 +121,13 @@ void handle_jpg(void)
     {
         return;
     }
-    
-        //Serial.println(buttonA.wasPressedFor()) 
+
+    //Serial.println(buttonA.wasPressedFor())
     String response = "HTTP/1.1 200 OK\r\n";
     response += "Content-disposition: inline; filename=capture.jpg\r\n";
     response += "Content-type: image/jpeg\r\n\r\n";
     server.sendContent(response);
     client.write((char *)cam.getfb(), cam.getSize());
-       
 }
 
 void handleNotFound()
@@ -156,8 +156,30 @@ void lcdMessage(String msg)
 #endif
 }
 
+TaskHandle_t Core0Task1;
+TaskHandle_t Core1Task;
+
 void setup()
 {
+
+    xTaskCreatePinnedToCore(
+        Core0Code, /* Function to implement the task */
+        "Task1",   /* Name of the task */
+        10000,     /* Stack size in words */
+        NULL,      /* Task input parameter */
+        0,         /* Priority of the task */
+        &Core0Task1,    /* Task handle. */
+        0);        /* Core where the task should run */
+
+    // xTaskCreatePinnedToCore(
+    //     Core1Code, /* Function to implement the task */
+    //     "Task1",   /* Name of the task */
+    //     10000,     /* Stack size in words */
+    //     NULL,      /* Task input parameter */
+    //     0,         /* Priority of the task */
+    //     &Core1Task,    /* Task handle. */
+    //     1);        /* Core where the task should run */
+
 #ifdef ENABLE_OLED
     hasDisplay = display.init();
     if (hasDisplay)
@@ -175,19 +197,17 @@ void setup()
         ;
     }
 
-
-
     ////////////////////////////////////////////////////////////////////////////////
     // initialize the pushbutton pin as an input:
-      buttonA.setChangedHandler(changed);
-      buttonA.setPressedHandler(pressed);
-     buttonA.setReleasedHandler(released);
+    buttonA.setChangedHandler(changed);
+    buttonA.setPressedHandler(pressed);
+    buttonA.setReleasedHandler(released);
 
-     buttonA.setTapHandler(tap);
+    buttonA.setTapHandler(tap);
     buttonA.setClickHandler(click);
     buttonA.setLongClickHandler(longClick);
-     buttonA.setDoubleClickHandler(doubleClick);
-     buttonA.setTripleClickHandler(tripleClick);
+    buttonA.setDoubleClickHandler(doubleClick);
+    buttonA.setTripleClickHandler(tripleClick);
     ////////////////////////////////////////////////////////////////////////////////////
     int camInit =
 #ifdef USEBOARD_TTGO_T
@@ -271,55 +291,28 @@ WiFiClient client; // FIXME, support multiple clients
 
 void loop()
 {
-
-    buttonA.loop();
-    Serial.println("Looping");
-
-
-#ifdef ENABLE_WEBSERVER
-    server.handleClient();
+    #ifdef ENABLE_WEBSERVER
+        server.handleClient();
 #endif
 
-    // #ifdef ENABLE_RTSPSERVER
-    //     uint32_t msecPerFrame = 100;
-    //     static uint32_t lastimage = millis();
-
-    //     // If we have an active client connection, just service that until gone
-    //     // (FIXME - support multiple simultaneous clients)
-    //     if(session) {
-    //         session->handleRequests(0); // we don't use a timeout here,
-    //         // instead we send only if we have new enough frames
-
-    //         uint32_t now = millis();
-    //         if(now > lastimage + msecPerFrame || now < lastimage) { // handle clock rollover
-    //             session->broadcastCurrentFrame(now);
-    //             lastimage = now;
-
-    //             // check if we are overrunning our max frame rate
-    //             now = millis();
-    //             if(now > lastimage + msecPerFrame)
-    //                 printf("warning exceeding max frame rate of %d ms\n", now - lastimage);
-    //         }
-
-    //         if(session->m_stopped) {
-    //             delete session;
-    //             delete streamer;
-    //             session = NULL;
-    //             streamer = NULL;
-    //         }
-    //     }
-    //     else {
-    //         client = rtspServer.accept();
-
-    //         if(client) {
-    //             //streamer = new SimStreamer(&client, true);             // our streamer for UDP/TCP based RTP transport
-    //             streamer = new OV2640Streamer(&client, cam);             // our streamer for UDP/TCP based RTP transport
-
-    //             session = new CRtspSession(&client, streamer); // our threads RTSP session and state
-    //         }
-    //     }
-    // #endif
 }
+
+
+
+void Core0Code(void *parameter)
+{
+    for (;;)
+    {
+        buttonA.loop();
+        if (millis() >= time_now + period+1)
+        {
+            time_now += period;
+            Serial.println("core 0 loop");
+        }
+        vTaskDelay(20);
+    }
+}
+
 /////////////////////////////////////////////////////////////////
 
 void pressed(Button2 &btn)

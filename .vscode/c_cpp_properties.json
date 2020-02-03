@@ -6,13 +6,13 @@
         {
             "name": "Win32",
             "includePath": [
-                "c:/Users/jon/Desktop/IT_Projects/arduino/TenDollarWebcam-master1/src",
+                "c:/Users/jon/Desktop/IT_Projects/arduino/Smart Doorbell Camera and Button/src",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/WebServer/src",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/FS/src",
                 "C:/Users/jon/.platformio/lib/ESP8266_SSD1306_ID562/src",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/Wire/src",
                 "C:/Users/jon/.platformio/lib/Button2_ID6059/src",
-                "c:/Users/jon/Desktop/IT_Projects/arduino/TenDollarWebcam-master1/.pio/libdeps/m5stack-core-esp32/AutoWifi/src",
+                "c:/Users/jon/Desktop/IT_Projects/arduino/Smart Doorbell Camera and Button/.pio/libdeps/m5stack-core-esp32/AutoWifi/src",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/Preferences/src",
                 "C:/Users/jon/.platformio/lib/Micro-RTSP_ID6071/src",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src",
@@ -106,13 +106,13 @@
             "browse": {
                 "limitSymbolsToIncludedHeaders": true,
                 "path": [
-                    "c:/Users/jon/Desktop/IT_Projects/arduino/TenDollarWebcam-master1/src",
+                    "c:/Users/jon/Desktop/IT_Projects/arduino/Smart Doorbell Camera and Button/src",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/WebServer/src",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/FS/src",
                     "C:/Users/jon/.platformio/lib/ESP8266_SSD1306_ID562/src",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/Wire/src",
                     "C:/Users/jon/.platformio/lib/Button2_ID6059/src",
-                    "c:/Users/jon/Desktop/IT_Projects/arduino/TenDollarWebcam-master1/.pio/libdeps/m5stack-core-esp32/AutoWifi/src",
+                    "c:/Users/jon/Desktop/IT_Projects/arduino/Smart Doorbell Camera and Button/.pio/libdeps/m5stack-core-esp32/AutoWifi/src",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/Preferences/src",
                     "C:/Users/jon/.platformio/lib/Micro-RTSP_ID6071/src",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src",

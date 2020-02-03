@@ -437,7 +437,7 @@ void loop()
   {
     time_now += period;
     Serial.println("core 1 loop");
-                Serial.println(WiFi.channel());
+                      Serial.println("Wifi Cahnnel"+ WiFi.channel());
 #ifdef SENDER
       static uint32_t counter = 0;
       esp_now_msg_t msg;
@@ -476,7 +476,8 @@ void Core0Code(void *parameter)
     {
       time_now += period;
       Serial.println("core 0 loop");
-                      Serial.println(WiFi.channel());
+
+                      Serial.println("Wifi Cahnnel"+ WiFi.channel());
 
 
 #ifdef SENDER

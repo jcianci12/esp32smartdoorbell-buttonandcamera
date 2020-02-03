@@ -437,15 +437,17 @@ void loop()
   {
     time_now += period;
     Serial.println("core 1 loop");
-                      Serial.println("Wifi Cahnnel"+ WiFi.channel());
-// #ifdef SENDER
-//       static uint32_t counter = 0;
-//       esp_now_msg_t msg;
-//       msg.address = 0;
-//       msg.counter = ++counter;
-//       send_msg(&msg);
-//       //digitalWrite(LED_PIN, !digitalRead(LED_PIN));
-// #endif
+    Serial.println("Wifi Cahnnel");
+
+    Serial.println(WiFi.channel());
+    // #ifdef SENDER
+    //       static uint32_t counter = 0;
+    //       esp_now_msg_t msg;
+    //       msg.address = 0;
+    //       msg.counter = ++counter;
+    //       send_msg(&msg);
+    //       //digitalWrite(LED_PIN, !digitalRead(LED_PIN));
+    // #endif
   }
 #endif
 }
@@ -476,18 +478,18 @@ void Core0Code(void *parameter)
     {
       time_now += period;
       Serial.println("core 0 loop");
+      Serial.println("Wifi Cahnnel");
 
-                      Serial.println("Wifi Cahnnel"+ WiFi.channel());
+      Serial.println(WiFi.channel());
 
-
-// #ifdef SENDER
-//       static uint32_t counter = 0;
-//       esp_now_msg_t msg;
-//       msg.address = 0;
-//       msg.counter = ++counter;
-//       send_msg(&msg);
-//       //digitalWrite(LED_PIN, !digitalRead(LED_PIN));
-// #endif
+      // #ifdef SENDER
+      //       static uint32_t counter = 0;
+      //       esp_now_msg_t msg;
+      //       msg.address = 0;
+      //       msg.counter = ++counter;
+      //       send_msg(&msg);
+      //       //digitalWrite(LED_PIN, !digitalRead(LED_PIN));
+      // #endif
     }
     vTaskDelay(20);
     //Serial.println( uxTaskGetStackHighWaterMark(NULL));

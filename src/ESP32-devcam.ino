@@ -428,6 +428,18 @@ CStreamer *streamer;
 CRtspSession *session;
 WiFiClient client; // FIXME, support multiple clients
 
+
+void message(){
+#ifdef SENDER
+          static uint32_t counter = 0;
+          esp_now_msg_t msg;
+          msg.address = 0;
+          msg.counter = ++counter;
+          send_msg(&msg);
+          //digitalWrite(LED_PIN, !digitalRead(LED_PIN));
+    #endif
+}
+
 void loop()
 {
 
@@ -440,14 +452,9 @@ void loop()
     Serial.println("Wifi Cahnnel");
 
     Serial.println(WiFi.channel());
-    // #ifdef SENDER
-    //       static uint32_t counter = 0;
-    //       esp_now_msg_t msg;
-    //       msg.address = 0;
-    //       msg.counter = ++counter;
-    //       send_msg(&msg);
-    //       //digitalWrite(LED_PIN, !digitalRead(LED_PIN));
-    // #endif
+    message();
+
+    
   }
 #endif
 }

@@ -445,13 +445,13 @@ void loop()
 
 #ifdef ENABLE_WEBSERVER
   server.handleClient();
-  if (millis() >= time_now + period + 1)
+  if (millis() >= time_now + 100 + 1)
   {
     time_now += period;
-    Serial.println("core 1 loop");
-    Serial.println("Wifi Cahnnel");
+    Serial.print("1");
+    //Serial.println("Wifi Cahnnel");
 
-    Serial.println(WiFi.channel());
+    //Serial.println(WiFi.channel());
     message();
 
     
@@ -484,10 +484,10 @@ void Core0Code(void *parameter)
     if (millis() >= time_now + period + 1)
     {
       time_now += period;
-      Serial.println("core 0 loop");
-      Serial.println("Wifi Cahnnel");
+      Serial.print(".0");
+      //Serial.println("Wifi Cahnnel");
 
-      Serial.println(WiFi.channel());
+      //Serial.println(WiFi.channel());
 
       // #ifdef SENDER
       //       static uint32_t counter = 0;

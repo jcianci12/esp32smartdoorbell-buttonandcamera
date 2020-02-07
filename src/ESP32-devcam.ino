@@ -78,6 +78,7 @@ int period = 1000;
 unsigned long time_now = 0;
 
 int32_t i = 0;
+   int32_t MessageTryCounter = 0;
 
 ////////////////////////////////////////////////////////////////
 //ESPNOW RELEVANT CODE
@@ -139,6 +140,7 @@ static void msg_recv_cb(const uint8_t *mac_addr, const uint8_t *data, int len)
     Serial.print("Counter: ");
     Serial.println(msg.counter);
     //digitalWrite(LED_PIN, !digitalRead(LED_PIN));
+    //counter = 1;
   }
 }
 
@@ -297,14 +299,14 @@ TaskHandle_t Core1Task1;
 void setup()
 {
 
-  xTaskCreatePinnedToCore(
-      Core0Code,   /* Function to implement the task */
-      "Task0",     /* Name of the task */
-      9208,        /* Stack size in words */
-      NULL,        /* Task input parameter */
-      0,           /* Priority of the task */
-      &Core0Task1, /* Task handle. */
-      0);          /* Core where the task should run */
+  // xTaskCreatePinnedToCore(
+  //     Core0Code,   /* Function to implement the task */
+  //     "Task0",     /* Name of the task */
+  //     9208,        /* Stack size in words */
+  //     NULL,        /* Task input parameter */
+  //     0,           /* Priority of the task */
+  //     &Core0Task1, /* Task handle. */
+  //     0);          /* Core where the task should run */
 
   // xTaskCreatePinnedToCore(
   //     Core1Code, /* Function to implement the task */
@@ -430,14 +432,21 @@ WiFiClient client; // FIXME, support multiple clients
 
 
 void message(){
-#ifdef SENDER
+   while (MessageTryCounter=0)
+   {
+     #ifdef SENDER
           static uint32_t counter = 0;
           esp_now_msg_t msg;
           msg.address = 0;
           msg.counter = ++counter;
           send_msg(&msg);
+          Serial.println("no confirmation recieved, resending");
           //digitalWrite(LED_PIN, !digitalRead(LED_PIN));
     #endif
+   } 
+             Serial.println(MessageTryCounter);
+             MessageTryCounter =0;
+
 }
 
 void loop()
@@ -445,7 +454,7 @@ void loop()
 
 #ifdef ENABLE_WEBSERVER
   server.handleClient();
-  if (millis() >= time_now + 100 + 1)
+  if (millis() >= time_now + 2000 + 1)
   {
     time_now += period;
     Serial.print("1");
@@ -476,32 +485,32 @@ void loop()
 //     }
 // }
 
-void Core0Code(void *parameter)
-{
-  for (;;)
-  {
-    buttonA.loop();
-    if (millis() >= time_now + period + 1)
-    {
-      time_now += period;
-      Serial.print(".0");
-      //Serial.println("Wifi Cahnnel");
+// void Core0Code(void *parameter)
+// {
+//   for (;;)
+//   {
+//     buttonA.loop();
+//     if (millis() >= time_now + period + 1)
+//     {
+//       time_now += period;
+//       Serial.print(".0");
+//       //Serial.println("Wifi Cahnnel");
 
-      //Serial.println(WiFi.channel());
+//       //Serial.println(WiFi.channel());
 
-      // #ifdef SENDER
-      //       static uint32_t counter = 0;
-      //       esp_now_msg_t msg;
-      //       msg.address = 0;
-      //       msg.counter = ++counter;
-      //       send_msg(&msg);
-      //       //digitalWrite(LED_PIN, !digitalRead(LED_PIN));
-      // #endif
-    }
-    vTaskDelay(20);
-    //Serial.println( uxTaskGetStackHighWaterMark(NULL));
-  }
-}
+//       // #ifdef SENDER
+//       //       static uint32_t counter = 0;
+//       //       esp_now_msg_t msg;
+//       //       msg.address = 0;
+//       //       msg.counter = ++counter;
+//       //       send_msg(&msg);
+//       //       //digitalWrite(LED_PIN, !digitalRead(LED_PIN));
+//       // #endif
+//     }
+//     vTaskDelay(20);
+//     //Serial.println( uxTaskGetStackHighWaterMark(NULL));
+//   }
+// }
 
 /////////////////////////////////////////////////////////////////
 

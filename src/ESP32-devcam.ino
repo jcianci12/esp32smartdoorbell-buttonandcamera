@@ -320,9 +320,18 @@ void message(){
   Serial.println("Fetching");
 http.begin("http://192.168.0.17/");
 int httpCode = http.GET();
-
-
-Serial.println(httpCode)
+if (httpCode > 0) { //Check for the returning code
+ 
+  //  String payload = http.getString();
+  //  Serial.println(httpCode);
+  //  Serial.println(payload);
+}
+ 
+else {
+   Serial.println("Error on HTTP request");
+   message();
+}
+http.end(); //Free the resources
 }
 
 /////////////////////////////////////////////////////////////////

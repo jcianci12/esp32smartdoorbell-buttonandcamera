@@ -1,3 +1,7 @@
 .pioenvs
 .piolibdeps
 .pio/build/m5stack-core-esp32/.sconsign.py37.dblite
+*.elf
+*.dblite
+*.bin
+

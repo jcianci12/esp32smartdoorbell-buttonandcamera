@@ -4,4 +4,6 @@
 *.elf
 *.dblite
 *.bin
+*.o
+
 

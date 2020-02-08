@@ -5,5 +5,5 @@
 *.dblite
 *.bin
 *.o
-
+build/
 

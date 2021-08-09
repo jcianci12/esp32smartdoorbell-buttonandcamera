@@ -92,6 +92,8 @@ const char *mqttServer = "192.168.5.44";
 const int mqttPort = 1883;
 const char *mqttUser = "mqtt-user";
 const char *mqttPassword = "Chooks12$";
+WiFiClient espClient;
+PubSubClient pubsubclient(espClient);
 #endif
 
 void lcdMessage(String msg)
@@ -150,7 +152,7 @@ void setup()
     ////////////////////////////////////////////////////////////////////////////////
     // initialize the pushbutton pin as an input:
     // buttonA.setChangedHandler(changed);
-    // buttonA.setPressedHandler(pressed);
+    buttonA.setPressedHandler(pressed);
     // buttonA.setReleasedHandler(released);
 
     // buttonA.setTapHandler(tap);
@@ -235,14 +237,13 @@ void setup()
 #endif
 
 #ifdef ENABLE_MQTT
-    WiFiClient espClient;
-    PubSubClient client(espClient);
-    client.setServer(mqttServer, mqttPort); 
-    while (!client.connected())
+
+    pubsubclient.setServer(mqttServer, mqttPort);
+    while (!pubsubclient.connected())
     {
         Serial.println("Connecting to MQTT...");
 
-        if (client.connect("ESP32Client", mqttUser, mqttPassword))
+        if (pubsubclient.connect("ESP32Client", mqttUser, mqttPassword))
         {
 
             Serial.println("connected");
@@ -251,11 +252,11 @@ void setup()
         {
 
             Serial.print("failed with state ");
-            Serial.print(client.state());
+            Serial.print(pubsubclient.state());
             delay(2000);
         }
     }
-      client.publish("esp/test", "Hello from ESP32");
+    pubsubclient.publish("esp/test", "Hello from ESP32");
 
 #endif
 }
@@ -270,9 +271,10 @@ void loop()
     server.handleClient();
 #endif
 
-#ifdef ENABLE_MQTT
-// client.setServer(mqttServer, mqttPort);
+#ifdef ENABLE_RTSPSERVER
+    rtspServer.begin();
 #endif
+    buttonA.loop();
 }
 
 void Core0Code(void *parameter)
@@ -288,10 +290,20 @@ void Core0Code(void *parameter)
         vTaskDelay(20);
     }
 }
-HTTPClient http;
 void message()
 {
     Serial.println("Fetching");
+#ifdef ENABLE_MQTT
+    bool MQTT_Reply = pubsubclient.publish("test", "Hello from ESP8266");
+    if (MQTT_Reply = true)
+    {
+        Serial.println("publish success");
+    }
+    else
+    {
+        Serial.println("Publish failure");
+    }
+#endif
 }
 
 /////////////////////////////////////////////////////////////////

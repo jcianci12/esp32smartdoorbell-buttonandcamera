@@ -12,6 +12,8 @@
 #include "OV2640.h"
 #include "CRtspSession.h"
 
+#include "PubSubClient.h"
+
 /////////////////////////////////////////////////////////////////
 
 #include "Button2.h"
@@ -33,8 +35,10 @@
 #endif
 
 // #define SOFTAP_MODE // If you want to run our own softap turn this on
-#define ENABLE_WEBSERVER
+//#define ENABLE_WEBSERVER
 #define ENABLE_RTSPSERVER
+
+#define ENABLE_MQTT
 
 #ifndef USEBOARD_AITHINKER
 // If your board has a GPIO which is attached to a button, uncomment the following line
@@ -78,73 +82,16 @@ Button2 buttonA = Button2(DOORBELL_BUTTON);
 // variables will change:
 /////////////////////////////////////////////////////////////////////////
 
-
-
 int period = 1000;
 unsigned long time_now = 0;
 
 int32_t i = 0;
 
-#ifdef ENABLE_WEBSERVER
-void handle_jpg_stream(void)
-{
-
-    WiFiClient client = server.client();
-    String response = "HTTP/1.1 200 OK\r\n";
-    response += "Content-Type: multipart/x-mixed-replace; boundary=frame\r\n\r\n";
-    server.sendContent(response);
-
-    while (1)
-    {
-
-        cam.run();
-        //Serial.println(buttonA.wasPressedFor());
-
-        //Serial.println("in the cam loop" + i);
-        i = i + 1;
-
-        response = "--frame\r\n";
-        response += "Content-Type: image/jpeg\r\n\r\n";
-        server.sendContent(response);
-
-        client.write((char *)cam.getfb(), cam.getSize());
-        server.sendContent("\r\n");
-        if (!client.connected())
-            break;
-    }
-}
-void handle_jpg(void)
-{
-    //   buttonA.loop();
-
-    WiFiClient client = server.client();
-
-    cam.run();
-    if (!client.connected())
-    {
-        return;
-    }
-
-    //Serial.println(buttonA.wasPressedFor())
-    String response = "HTTP/1.1 200 OK\r\n";
-    response += "Content-disposition: inline; filename=capture.jpg\r\n";
-    response += "Content-type: image/jpeg\r\n\r\n";
-    server.sendContent(response);
-    client.write((char *)cam.getfb(), cam.getSize());
-}
-
-void handleNotFound()
-{
-    String message = "Server is running!\n\n";
-    message += "URI: ";
-    message += server.uri();
-    message += "\nMethod: ";
-    message += (server.method() == HTTP_GET) ? "GET" : "POST";
-    message += "\nArguments: ";
-    message += server.args();
-    message += "\n";
-    server.send(200, "text/plain", message);
-}
+#ifdef ENABLE_MQTT
+const char *mqttServer = "192.168.5.44";
+const int mqttPort = 1883;
+const char *mqttUser = "mqtt-user";
+const char *mqttPassword = "Chooks12$";
 #endif
 
 void lcdMessage(String msg)
@@ -165,14 +112,14 @@ TaskHandle_t Core1Task;
 void setup()
 {
 
-    xTaskCreatePinnedToCore(
-        Core0Code, /* Function to implement the task */
-        "Task1",   /* Name of the task */
-        10000,     /* Stack size in words */
-        NULL,      /* Task input parameter */
-        0,         /* Priority of the task */
-        &Core0Task1,    /* Task handle. */
-        0);        /* Core where the task should run */
+    // xTaskCreatePinnedToCore(
+    //     Core0Code,   /* Function to implement the task */
+    //     "Task1",     /* Name of the task */
+    //     10000,       /* Stack size in words */
+    //     NULL,        /* Task input parameter */
+    //     0,           /* Priority of the task */
+    //     &Core0Task1, /* Task handle. */
+    //     0);          /* Core where the task should run */
 
     // xTaskCreatePinnedToCore(
     //     Core1Code, /* Function to implement the task */
@@ -202,15 +149,15 @@ void setup()
 
     ////////////////////////////////////////////////////////////////////////////////
     // initialize the pushbutton pin as an input:
-    buttonA.setChangedHandler(changed);
-    buttonA.setPressedHandler(pressed);
-    buttonA.setReleasedHandler(released);
+    // buttonA.setChangedHandler(changed);
+    // buttonA.setPressedHandler(pressed);
+    // buttonA.setReleasedHandler(released);
 
-    buttonA.setTapHandler(tap);
-    buttonA.setClickHandler(click);
-    buttonA.setLongClickHandler(longClick);
-    buttonA.setDoubleClickHandler(doubleClick);
-    buttonA.setTripleClickHandler(tripleClick);
+    // buttonA.setTapHandler(tap);
+    // buttonA.setClickHandler(click);
+    // buttonA.setLongClickHandler(longClick);
+    // buttonA.setDoubleClickHandler(doubleClick);
+    // buttonA.setTripleClickHandler(tripleClick);
     ////////////////////////////////////////////////////////////////////////////////////
     int camInit =
 #ifdef USEBOARD_TTGO_T
@@ -286,6 +233,31 @@ void setup()
 #ifdef ENABLE_RTSPSERVER
     rtspServer.begin();
 #endif
+
+#ifdef ENABLE_MQTT
+    WiFiClient espClient;
+    PubSubClient client(espClient);
+    client.setServer(mqttServer, mqttPort); 
+    while (!client.connected())
+    {
+        Serial.println("Connecting to MQTT...");
+
+        if (client.connect("ESP32Client", mqttUser, mqttPassword))
+        {
+
+            Serial.println("connected");
+        }
+        else
+        {
+
+            Serial.print("failed with state ");
+            Serial.print(client.state());
+            delay(2000);
+        }
+    }
+      client.publish("esp/test", "Hello from ESP32");
+
+#endif
 }
 
 CStreamer *streamer;
@@ -294,20 +266,21 @@ WiFiClient client; // FIXME, support multiple clients
 
 void loop()
 {
-    #ifdef ENABLE_WEBSERVER
-        server.handleClient();
+#ifdef ENABLE_WEBSERVER
+    server.handleClient();
 #endif
 
+#ifdef ENABLE_MQTT
+// client.setServer(mqttServer, mqttPort);
+#endif
 }
-
-
 
 void Core0Code(void *parameter)
 {
     for (;;)
     {
         buttonA.loop();
-        if (millis() >= time_now + period+1)
+        if (millis() >= time_now + period + 1)
         {
             time_now += period;
             Serial.println("core 0 loop");
@@ -316,22 +289,9 @@ void Core0Code(void *parameter)
     }
 }
 HTTPClient http;
-void message(){
-  Serial.println("Fetching");
-http.begin("http://192.168.0.17/");
-int httpCode = http.GET();
-if (httpCode > 0) { //Check for the returning code
- 
-  //  String payload = http.getString();
-  //  Serial.println(httpCode);
-  //  Serial.println(payload);
-}
- 
-else {
-   Serial.println("Error on HTTP request");
-   message();
-}
-http.end(); //Free the resources
+void message()
+{
+    Serial.println("Fetching");
 }
 
 /////////////////////////////////////////////////////////////////
@@ -340,7 +300,6 @@ void pressed(Button2 &btn)
 {
     Serial.println("pressed");
     message();
-
 }
 void released(Button2 &btn)
 {

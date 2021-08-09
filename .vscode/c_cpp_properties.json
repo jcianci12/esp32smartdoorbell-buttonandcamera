@@ -1,12 +1,15 @@
+//
+// !!! WARNING !!! AUTO-GENERATED FILE!
+// PLEASE DO NOT MODIFY IT AND USE "platformio.ini":
+// https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags
+//
 {
     "configurations": [
         {
-            "name": "!!! WARNING !!! AUTO-GENERATED FILE, PLEASE DO NOT MODIFY IT AND USE https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags"
-        },
-        {
-            "name": "Win32",
+            "name": "PlatformIO",
             "includePath": [
-                "c:/Users/jon/Desktop/IT_Projects/arduino/Smart Doorbell Camera and Button/src",
+                "C:/Users/jon/Desktop/IT_Projects/arduino/Smart Doorbell Camera and Button/include",
+                "C:/Users/jon/Desktop/IT_Projects/arduino/Smart Doorbell Camera and Button/src",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/WebServer/src",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/FS/src",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/HTTPClient/src",
@@ -14,7 +17,7 @@
                 "C:/Users/jon/.platformio/lib/ESP8266_SSD1306_ID562/src",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/Wire/src",
                 "C:/Users/jon/.platformio/lib/Button2_ID6059/src",
-                "c:/Users/jon/Desktop/IT_Projects/arduino/Smart Doorbell Camera and Button/.pio/libdeps/m5stack-core-esp32/AutoWifi/src",
+                "C:/Users/jon/Desktop/IT_Projects/arduino/Smart Doorbell Camera and Button/.pio/libdeps/m5stack-core-esp32/AutoWifi/src",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/Preferences/src",
                 "C:/Users/jon/.platformio/lib/Micro-RTSP_ID6071/src",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src",
@@ -27,6 +30,7 @@
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/coap",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/console",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/driver",
+                "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/efuse",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/esp-tls",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/esp32",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/esp_adc_cal",
@@ -34,7 +38,10 @@
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/esp_http_client",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/esp_http_server",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/esp_https_ota",
+                "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/esp_https_server",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/esp_ringbuf",
+                "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/esp_websocket_client",
+                "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/espcoredump",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/ethernet",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/expat",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/fatfs",
@@ -66,6 +73,7 @@
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/tcp_transport",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/tcpip_adapter",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/ulp",
+                "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/unity",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/vfs",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/wear_levelling",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/wifi_provisioning",
@@ -75,7 +83,7 @@
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/esp32-camera",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/fb_gfx",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/cores/esp32",
-                "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/variants/m5stack_core_esp32",
+                "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/variants/esp32",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/SPI/src",
                 "C:/Users/jon/.platformio/lib/AutoWifi_ID6151/src",
                 "C:/Users/jon/.platformio/lib/ESPNowW_ID6122/src",
@@ -93,6 +101,7 @@
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/ESPmDNS/src",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/FFat/src",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/HTTPUpdate/src",
+                "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/HTTPUpdateServer/src",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/NetBIOS/src",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/SD/src",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/SD_MMC/src",
@@ -100,13 +109,15 @@
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/SimpleBLE/src",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/Ticker/src",
                 "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/Update/src",
+                "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/WiFiProv/src",
                 "C:/Users/jon/.platformio/packages/tool-unity",
                 ""
             ],
             "browse": {
                 "limitSymbolsToIncludedHeaders": true,
                 "path": [
-                    "c:/Users/jon/Desktop/IT_Projects/arduino/Smart Doorbell Camera and Button/src",
+                    "C:/Users/jon/Desktop/IT_Projects/arduino/Smart Doorbell Camera and Button/include",
+                    "C:/Users/jon/Desktop/IT_Projects/arduino/Smart Doorbell Camera and Button/src",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/WebServer/src",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/FS/src",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/HTTPClient/src",
@@ -114,7 +125,7 @@
                     "C:/Users/jon/.platformio/lib/ESP8266_SSD1306_ID562/src",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/Wire/src",
                     "C:/Users/jon/.platformio/lib/Button2_ID6059/src",
-                    "c:/Users/jon/Desktop/IT_Projects/arduino/Smart Doorbell Camera and Button/.pio/libdeps/m5stack-core-esp32/AutoWifi/src",
+                    "C:/Users/jon/Desktop/IT_Projects/arduino/Smart Doorbell Camera and Button/.pio/libdeps/m5stack-core-esp32/AutoWifi/src",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/Preferences/src",
                     "C:/Users/jon/.platformio/lib/Micro-RTSP_ID6071/src",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src",
@@ -127,6 +138,7 @@
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/coap",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/console",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/driver",
+                    "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/efuse",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/esp-tls",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/esp32",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/esp_adc_cal",
@@ -134,7 +146,10 @@
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/esp_http_client",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/esp_http_server",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/esp_https_ota",
+                    "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/esp_https_server",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/esp_ringbuf",
+                    "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/esp_websocket_client",
+                    "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/espcoredump",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/ethernet",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/expat",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/fatfs",
@@ -166,6 +181,7 @@
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/tcp_transport",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/tcpip_adapter",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/ulp",
+                    "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/unity",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/vfs",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/wear_levelling",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/wifi_provisioning",
@@ -175,7 +191,7 @@
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/esp32-camera",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/fb_gfx",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/cores/esp32",
-                    "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/variants/m5stack_core_esp32",
+                    "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/variants/esp32",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/SPI/src",
                     "C:/Users/jon/.platformio/lib/AutoWifi_ID6151/src",
                     "C:/Users/jon/.platformio/lib/ESPNowW_ID6122/src",
@@ -193,6 +209,7 @@
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/ESPmDNS/src",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/FFat/src",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/HTTPUpdate/src",
+                    "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/HTTPUpdateServer/src",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/NetBIOS/src",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/SD/src",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/SD_MMC/src",
@@ -200,13 +217,14 @@
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/SimpleBLE/src",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/Ticker/src",
                     "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/Update/src",
+                    "C:/Users/jon/.platformio/packages/framework-arduinoespressif32/libraries/WiFiProv/src",
                     "C:/Users/jon/.platformio/packages/tool-unity",
                     ""
                 ]
             },
             "defines": [
-                "PLATFORMIO=40101",
-                "ARDUINO_M5Stack_Core_ESP32",
+                "PLATFORMIO=50100",
+                "ARDUINO_ESP32_DEV",
                 "ESP32",
                 "ESP_PLATFORM",
                 "F_CPU=240000000L",
@@ -214,14 +232,17 @@
                 "MBEDTLS_CONFIG_FILE=\"mbedtls/esp_config.h\"",
                 "ARDUINO=10805",
                 "ARDUINO_ARCH_ESP32",
-                "ARDUINO_VARIANT=\"m5stack_core_esp32\"",
-                "ARDUINO_BOARD=\"M5Stack Core ESP32\"",
+                "ARDUINO_VARIANT=\"esp32\"",
+                "ARDUINO_BOARD=\"Espressif ESP32 Dev Module\"",
                 ""
             ],
-            "intelliSenseMode": "clang-x64",
             "cStandard": "c99",
             "cppStandard": "c++11",
-            "compilerPath": "\"C:/Users/jon/.platformio/packages/toolchain-xtensa32/bin/xtensa-esp32-elf-gcc.exe\" -mlongcalls"
+            "compilerPath": "C:/Users/jon/.platformio/packages/toolchain-xtensa32@2.50200.80/bin/xtensa-esp32-elf-gcc.exe",
+            "compilerArgs": [
+                "-mlongcalls",
+                ""
+            ]
         }
     ],
     "version": 4
